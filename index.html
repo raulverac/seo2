@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Dashboard de Monitor SEO Competitivo en Tiempo Real">
+    <title>SEO Monitor Pro | Inteligencia Competitiva</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- html2pdf.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-wrapper">
+        <div class="login-box card border-0 shadow-lg">
+            <div class="card-body p-5">
+                <div class="text-center mb-4">
+                    <div class="login-logo mb-3">
+                        <i class="bi bi-radar fs-1 text-primary"></i>
+                    </div>
+                    <h3 class="fw-bold text-dark">SEO Monitor Pro</h3>
+                    <p class="text-muted small">Panel de Inteligencia Competitiva</p>
+                </div>
+                <form id="loginForm">
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold text-uppercase text-muted">Usuario</label>
+                        <div class="input-group">
+                            <span class="input-group-text border-end-0 bg-light"><i class="bi bi-person"></i></span>
+                            <input type="text" id="username" class="form-control border-start-0 bg-light" placeholder="admin" required>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label small fw-bold text-uppercase text-muted">Contraseña</label>
+                        <div class="input-group">
+                            <span class="input-group-text border-end-0 bg-light"><i class="bi bi-lock"></i></span>
+                            <input type="password" id="password" class="form-control border-start-0 bg-light" placeholder="••••••••" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100 py-3 rounded-pill fw-bold shadow-sm">
+                        Iniciar Sesión <i class="bi bi-arrow-right ms-2"></i>
+                    </button>
+                    <div id="loginError" class="alert alert-danger mt-3 py-2 small" style="display: none;">
+                        Credenciales incorrectas. Intenta de nuevo.
+                    </div>
+                </form>
+                <div class="text-center mt-4">
+                    <p class="text-muted smaller mb-0">&copy; 2026 Antigravity SEO Systems</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main App Content (Hidden by default) -->
+    <div id="mainApp" style="display: none;">
+        <div class="container-fluid p-0">
+            <div class="d-flex w-100 h-100">
+            <!-- Sidebar -->
+            <nav class="sidebar text-white p-0 d-flex flex-column h-100 fixed-top" id="sidebar">
+                <div class="sidebar-heading">
+                    <i class="bi bi-radar fs-3 me-2"></i>
+                    <span>SEO-MW</span>
+                </div>
+
+                <ul class="nav nav-pills flex-column mb-auto">
+                    <li class="nav-item">
+                        <a href="#dashboardSection" class="nav-link active" aria-current="page">
+                            <i class="bi bi-grid-fill me-3"></i>
+                            Dashboard
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#analyticsSection" class="nav-link">
+                            <i class="bi bi-bar-chart-line me-3"></i>
+                            Analytics
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#screamingFrogSection" class="nav-link">
+                            <i class="bi bi-bug me-3"></i>
+                            Screaming Frog
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <div class="nav-link d-flex align-items-center text-muted fw-bold small text-uppercase mt-2 mb-1"
+                            style="pointer-events: none; opacity: 0.8;">
+                            <i class="bi bi-search me-3"></i>
+                            Search Console
+                        </div>
+                        <ul class="nav flex-column ps-3">
+                            <li class="nav-item">
+                                <a href="#gscPerformanceSection" class="nav-link py-2 small opacity-75">
+                                    <i class="bi bi-dot me-1"></i> General
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#gscIndexingSection" class="nav-link py-2 small opacity-75">
+                                    <i class="bi bi-dot me-1"></i> Indexación
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#cwvSection" class="nav-link py-2 small opacity-75">
+                                    <i class="bi bi-dot me-1"></i> Core Web Vitals
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#keywordSection" class="nav-link py-2 small opacity-75">
+                                    <i class="bi bi-dot me-1"></i> Keywords
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <div class="mt-auto p-3 border-top border-secondary border-opacity-10">
+                    <div class="dropdown">
+                        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+                            id="dropdownUser1" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="https://github.com/mdo.png" alt="" width="32" height="32"
+                                class="rounded-circle me-2">
+                            <div>
+                                <div class="small fw-bold">Admin SEO</div>
+                                <div class="text-muted" style="font-size: 0.7rem;">Enterprise Tier</div>
+                            </div>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-dark text-small shadow" aria-labelledby="dropdownUser1">
+                            <li><a class="dropdown-item" href="#">Configuración</a></li>
+                            <li><a class="dropdown-item" href="#">Perfil</a></li>
+                            <li><a class="dropdown-item text-lime fw-bold" href="http://localhost:3000/auth/google">
+                                <i class="bi bi-google me-2"></i> Conectar GSC
+                            </a></li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="#" onclick="logout()">Cerrar sesión</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav> <!-- Main content -->
+            <main class="main-content flex-grow-1 p-4">
+                <header class="d-flex justify-content-between align-items-center mb-4 pb-3">
+                    <div>
+                        <h1 class="h4 mb-0 text-white">Monitor SEO-MW en Tiempo Real</h1>
+                        <span class="text-muted small"><i class="bi bi-clock-history me-1"></i> Última actualización:
+                            Hace 2 min</span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <a href="http://localhost:3000/auth/google" target="_blank"
+                            class="btn btn-outline-danger btn-sm me-2">
+                            <i class="bi bi-google me-1"></i> Conectar GSC
+                        </a>
+                        <button class="btn btn-primary btn-sm me-2">
+                            <i class="bi bi-arrow-clockwise me-1"></i> Actualizar
+                        </button>
+                        <button class="btn btn-lime btn-sm shadow-sm" id="btnDownloadPDF">
+                            <i class="bi bi-file-earmark-pdf me-1"></i> Bajar PDF
+                        </button>
+                    </div>
+                </header>
+
+                <!-- Scanner Input -->
+                <section class="card mb-4">
+                    <div class="card-body p-3 d-flex align-items-center justify-content-between flex-wrap gap-3">
+                        <div class="d-flex align-items-center">
+                            <div class="me-3">
+                                <h6 class="mb-0 fw-bold">Escanear Nuevo Dominio</h6>
+                                <p class="text-muted small mb-0">Analiza tráfico, keywords y backlinks en tiempo real.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex-grow-1" style="max-width: 600px;">
+                            <form id="scanForm" class="d-flex">
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-globe"></i></span>
+                                    <select id="domainInput" class="form-select" required>
+                                        <option value="" disabled selected>Selecciona una propiedad...</option>
+                                        <option value="https://www.almalunatienda.cl/">almalunatienda.cl (Demo)</option>
+                                    </select>
+                                    <button class="btn btn-lime px-4" type="submit" id="btnScan">
+                                        <i class="bi bi-search me-1"></i> Escanear
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </section>
+                <!-- Dashboard Welcome Section -->
+                <section class="dashboard-section" id="dashboardSection">
+                    <div class="card border-0 shadow-sm overflow-hidden mb-4"
+                        style="background: linear-gradient(135deg, #adff2f 0%, #d4ff33 100%);">
+                        <div class="card-body p-4 p-md-5">
+                            <div class="row align-items-center">
+                                <div class="col-lg-8">
+                                    <h1 class="display-6 fw-bold text-dark mb-2">¡Bienvenido al Panel SEO MW!</h1>
+                                    <p class="lead text-dark opacity-75 mb-4">Analiza el rendimiento de tus propiedades
+                                        de Google en tiempo real. Selecciona una propiedad y presiona "Escanear" para
+                                        comenzar.</p>
+                                    <div class="d-flex flex-wrap gap-2">
+                                        <div
+                                            class="bg-white bg-opacity-25 rounded px-3 py-2 text-dark small fw-bold border border-dark border-opacity-10">
+                                            <i class="bi bi-shield-check me-2"></i>OAuth Conectado
+                                        </div>
+                                        <div
+                                            class="bg-white bg-opacity-25 rounded px-3 py-2 text-dark small fw-bold border border-dark border-opacity-10">
+                                            <i class="bi bi-lightning-fill me-2"></i>Datos en tiempo real
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 d-none d-lg-block text-end">
+                                    <i class="bi bi-speedometer display-1 text-dark opacity-25"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Google Analytics: Resumen -->
+                <section class="mb-4 dashboard-section" id="analyticsSection" style="display: none;">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="bi bi-graph-up-arrow text-primary me-2 fs-4"></i>
+                        <h5 class="mb-0 fw-bold text-dark">Google Analytics 4 <small
+                                class="text-muted fw-normal">(Tráfico en tiempo real)</small></h5>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <div class="card stat-card border-0 shadow-sm h-100 bg-white">
+                                <div class="card-body">
+                                    <div class="text-xs text-uppercase text-muted fw-bold mb-1">Usuarios Activos</div>
+                                    <div class="h4 mb-0 fw-bold text-dark" id="gaUsers">--</div>
+                                    <div class="mt-2" style="font-size: 0.75rem;">
+                                        <span class="text-success fw-bold"><i class="bi bi-arrow-up"></i> 8.4%</span>
+                                        <span class="text-muted ms-1">vs últ. 30 días</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card stat-card border-0 shadow-sm h-100 bg-white">
+                                <div class="card-body">
+                                    <div class="text-xs text-uppercase text-muted fw-bold mb-1">Sesiones</div>
+                                    <div class="h4 mb-0 fw-bold text-dark" id="gaSessions">--</div>
+                                    <div class="mt-2" style="font-size: 0.75rem;">
+                                        <span class="text-success fw-bold"><i class="bi bi-arrow-up"></i> 12.1%</span>
+                                        <span class="text-muted ms-1">vs últ. 30 días</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card stat-card border-0 shadow-sm h-100 bg-white">
+                                <div class="card-body">
+                                    <div class="text-xs text-uppercase text-muted fw-bold mb-1">Engagement Rate</div>
+                                    <div class="h4 mb-0 fw-bold text-dark" id="gaEngagement">--</div>
+                                    <div class="mt-2" style="font-size: 0.75rem;">
+                                        <span class="text-danger fw-bold"><i class="bi bi-arrow-down"></i> 2.4%</span>
+                                        <span class="text-muted ms-1">vs últ. 30 días</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card stat-card border-0 shadow-sm h-100 bg-white">
+                                <div class="card-body">
+                                    <div class="text-xs text-uppercase text-muted fw-bold mb-1">Duración Media</div>
+                                    <div class="h4 mb-0 fw-bold text-dark" id="gaDuration">--</div>
+                                    <div class="mt-2" style="font-size: 0.75rem;">
+                                        <span class="text-success fw-bold"><i class="bi bi-arrow-up"></i> 5.2%</span>
+                                        <span class="text-muted ms-1">vs últ. 30 días</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mt-1">
+                        <div class="col-lg-8">
+                            <div class="card border-0 shadow-sm bg-white">
+                                <div
+                                    class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+                                    <h6 class="m-0 font-weight-bold text-dark fw-semibold">Canales de Adquisición</h6>
+                                    <div class="dropdown">
+                                        <button class="btn btn-sm btn-light border" type="button">Últimos 28
+                                            días</button>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div style="height: 250px;">
+                                        <canvas id="gaChannelsChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4">
+                            <div class="card border-0 shadow-sm bg-white h-100">
+                                <div class="card-header bg-white py-3 border-bottom">
+                                    <h6 class="m-0 font-weight-bold text-dark fw-semibold">Eventos Principales</h6>
+                                </div>
+                                <div class="card-body p-0">
+                                    <div class="list-group list-group-flush small">
+                                        <div
+                                            class="list-group-item d-flex justify-content-between align-items-center py-3">
+                                            <div>
+                                                <div class="fw-bold">page_view</div>
+                                                <div class="text-muted smaller">Vistas de página</div>
+                                            </div>
+                                            <span class="badge bg-primary rounded-pill">12.5k</span>
+                                        </div>
+                                        <div
+                                            class="list-group-item d-flex justify-content-between align-items-center py-3">
+                                            <div>
+                                                <div class="fw-bold">session_start</div>
+                                                <div class="text-muted smaller">Inicios de sesión</div>
+                                            </div>
+                                            <span class="badge bg-secondary rounded-pill">8.2k</span>
+                                        </div>
+                                        <div
+                                            class="list-group-item d-flex justify-content-between align-items-center py-3">
+                                            <div>
+                                                <div class="fw-bold">user_engagement</div>
+                                                <div class="text-muted smaller">Interacción de usuario</div>
+                                            </div>
+                                            <span class="badge bg-success rounded-pill">5.1k</span>
+                                        </div>
+                                        <div
+                                            class="list-group-item d-flex justify-content-between align-items-center py-3">
+                                            <div>
+                                                <div class="fw-bold">first_visit</div>
+                                                <div class="text-muted smaller">Primeras visitas</div>
+                                            </div>
+                                            <span class="badge bg-info rounded-pill">2.4k</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <!-- Google Search Console: Rendimiento -->
+                <section class="mb-4 dashboard-section" id="gscPerformanceSection" style="display: none;">
+                    <div class="row g-3">
+                        <div class="col-md-3">
+                            <div class="card stat-card border-left-primary h-100">
+                                <div class="card-body">
+                                    <div class="text-xs">Total Clicks</div>
+                                    <div class="h5" id="gscClicks">--</div>
+                                    <div class="text-muted" style="font-size: 0.7rem;">vs mes anterior <span
+                                            class="text-success small"><i class="bi bi-arrow-up"></i> 12%</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card stat-card border-left-success h-100">
+                                <div class="card-body">
+                                    <div class="text-xs">Total Impresiones</div>
+                                    <div class="h5" id="gscImpressions">--</div>
+                                    <div class="text-muted" style="font-size: 0.7rem;">vs mes anterior <span
+                                            class="text-success small"><i class="bi bi-arrow-up"></i> 8.4%</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card stat-card border-left-danger h-100">
+                                <div class="card-body">
+                                    <div class="text-xs">CTR Promedio</div>
+                                    <div class="h5" id="gscCtr">--</div>
+                                    <div class="text-muted" style="font-size: 0.7rem;">vs mes anterior <span
+                                            class="text-danger small"><i class="bi bi-arrow-down"></i> 0.2%</span></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card stat-card border-left-warning h-100">
+                                <div class="card-body">
+                                    <div class="text-xs">Posición Media</div>
+                                    <div class="h5" id="gscPosition">--</div>
+                                    <div class="text-muted" style="font-size: 0.7rem;">vs mes anterior <span
+                                            class="text-success small"><i class="bi bi-arrow-up"></i> 1.5 pos</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="row g-4 mb-4 dashboard-section" id="gscDetailsSection" style="display: none;">
+                    <!-- Top Queries -->
+                    <div class="col-lg-7">
+                        <div class="card h-100">
+                            <div class="card-header py-3 border-0 d-flex justify-content-between align-items-center">
+                                <h6 class="m-0 fw-bold">CONSULTAS QUE LLEVAN A TU SITIO</h6>
+                                <span class="badge bg-secondary opacity-50">Top 10</span>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-hover align-middle mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>CONSULTA</th>
+                                                <th class="text-center">CLICS</th>
+                                                <th class="text-center">IMPRESIONES</th>
+                                                <th class="text-center">POSICIÓN</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="gscQueriesTable">
+                                            <!-- Populated by JS -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Top Countries -->
+                    <div class="col-lg-5">
+                        <div class="card h-100">
+                            <div class="card-header py-3 border-0">
+                                <h6 class="m-0 fw-bold">PAÍSES PRINCIPALES</h6>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-hover align-middle mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>PAÍS</th>
+                                                <th class="text-center">CLICS</th>
+                                                <th class="text-center">%</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="gscCountriesTable">
+                                            <!-- Populated by JS -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class="row mb-4 g-4 dashboard-section" id="gscPagesSection" style="display: none;">
+                    <!-- GSC Top Pages Table -->
+                    <section class="col-lg-8">
+                        <div class="card h-100">
+                            <div
+                                class="card-header py-3 d-flex flex-row align-items-center justify-content-between border-0">
+                                <h6 class="m-0 fw-bold">RENDIMIENTO: PÁGINAS PRINCIPALES</h6>
+                                <div class="dropdown no-arrow">
+                                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        Últimos 30 días
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-dark shadow">
+                                        <li><a class="dropdown-item" href="#">Últimos 7 días</a></li>
+                                        <li><a class="dropdown-item" href="#">Últimos 30 días</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-hover align-middle mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>URL DE LA PÁGINA</th>
+                                                <th class="text-center">CLICS</th>
+                                                <th class="text-center">IMPRESIONES</th>
+                                                <th class="text-center">CTR</th>
+                                                <th class="text-center">POSICIÓN</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="gscPagesTable">
+                                            <!-- Populated by JS -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Real-time Alerts -->
+                    <section class="col-lg-4">
+                        <div class="card h-100">
+                            <div class="card-header py-3 border-0 d-flex justify-content-between align-items-center">
+                                <h6 class="m-0 fw-bold"><i class="bi bi-broadcast me-2 text-danger blink"></i>ALERTAS EN
+                                    TIEMPO REAL</h6>
+                            </div>
+                            <div class="card-body p-3">
+                                <div id="alertsList">
+                                    <!-- Populated by JS with Alert Items -->
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Indexación Section -->
+                <section class="mb-4 dashboard-section" id="gscIndexingSection" style="display: none;">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="bi bi-cloud-check text-info me-2 fs-4"></i>
+                        <h5 class="mb-0 fw-bold text-dark">Indexación <small class="text-muted fw-normal">(Estado de
+                                cobertura)</small></h5>
+                    </div>
+                    <div class="row g-4">
+                        <!-- Indexing Summary Chart -->
+                        <div class="col-lg-4">
+                            <div class="card border-0 shadow-sm h-100 bg-white">
+                                <div class="card-header bg-white py-3 border-bottom">
+                                    <h6 class="m-0 font-weight-bold text-dark fw-semibold">Estado de Páginas</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div style="height: 200px;">
+                                        <canvas id="indexingDonutChart"></canvas>
+                                    </div>
+                                    <div class="mt-3 small">
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <span><i class="bi bi-circle-fill text-success me-1"></i> Indexadas</span>
+                                            <span class="fw-bold" id="indexedCountText">--</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-1">
+                                            <span><i class="bi bi-circle-fill text-danger me-1"></i> No indexadas</span>
+                                            <span class="fw-bold" id="notIndexedCountText">--</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Indexing Evolution Chart -->
+                        <div class="col-lg-8">
+                            <div class="card border-0 shadow-sm h-100 bg-white">
+                                <div
+                                    class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+                                    <h6 class="m-0 font-weight-bold text-dark fw-semibold">Evolución de Indexación</h6>
+                                    <span class="badge bg-light text-muted border">Últimos 3 meses</span>
+                                </div>
+                                <div class="card-body">
+                                    <div style="height: 250px;">
+                                        <canvas id="indexingLineChart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="row g-4 mb-4 dashboard-section" id="keywordSection" style="display: none;">
+                    <!-- Detected Keywords -->
+                    <section class="col-lg-6">
+                        <div class="card border-0 shadow-sm h-100">
+                            <div
+                                class="card-header bg-white py-3 d-flex justify-content-between align-items-center border-bottom">
+                                <h6 class="m-0 font-weight-bold text-success fw-semibold">Nuevas Keywords Detectadas
+                                </h6>
+                                <span class="badge bg-success-subtle text-success border border-success-subtle">Top
+                                    Oportunidades</span>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-hover align-middle mb-0">
+                                        <thead class="table-light text-muted small">
+                                            <tr>
+                                                <th>Keyword</th>
+                                                <th>Volumen</th>
+                                                <th>Dificultad</th>
+                                                <th>Competidor</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="keywordsTable">
+                                            <!-- Populated by JS -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </section>
+                </div> <!-- Cierre de keywordSection row -->
+
+                <!-- Core Web Vitals Section -->
+                <section class="mb-4 dashboard-section" id="cwvSection" style="display: none;">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="bi bi-lightning-charge text-warning me-2 fs-4"></i>
+                        <h5 class="mb-0 fw-bold text-dark">Core Web Vitals <small
+                                class="text-muted fw-normal">(Experiencia del usuario)</small></h5>
+                    </div>
+                    <div class="row g-3">
+                        <!-- LCP -->
+                        <div class="col-md-4">
+                            <div class="card h-100 border-0 shadow-sm bg-white">
+                                <div class="card-body text-center py-4">
+                                    <div class="text-uppercase small text-muted fw-bold mb-2">Largest
+                                        Contentful Paint (LCP)</div>
+                                    <div class="h2 fw-800 mb-1" id="cwvLcpValue">--</div>
+                                    <div id="cwvLcpStatus" class="badge rounded-pill px-3 py-2 mt-2">--
+                                    </div>
+                                    <p class="text-muted small mt-3 mb-0">Carga del contenido principal.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- INP -->
+                        <div class="col-md-4">
+                            <div class="card h-100 border-0 shadow-sm bg-white">
+                                <div class="card-body text-center py-4">
+                                    <div class="text-uppercase small text-muted fw-bold mb-2">Interaction to
+                                        Next Paint (INP)</div>
+                                    <div class="h2 fw-800 mb-1" id="cwvInpValue">--</div>
+                                    <div id="cwvInpStatus" class="badge rounded-pill px-3 py-2 mt-2">--
+                                    </div>
+                                    <p class="text-muted small mt-3 mb-0">Responsividad a interacciones.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- CLS -->
+                        <div class="col-md-4">
+                            <div class="card h-100 border-0 shadow-sm bg-white">
+                                <div class="card-body text-center py-4">
+                                    <div class="text-uppercase small text-muted fw-bold mb-2">Cumulative
+                                        Layout Shift (CLS)</div>
+                                    <div class="h2 fw-800 mb-1" id="cwvClsValue">--</div>
+                                    <div id="cwvClsStatus" class="badge rounded-pill px-3 py-2 mt-2">--
+                                    </div>
+                                    <p class="text-muted small mt-3 mb-0">Estabilidad visual de la página.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- CWV Summary Alert -->
+                    <div class="card mt-3 border-0 shadow-sm bg-white" id="cwvSummaryCard" style="display: none;">
+                        <div class="card-body d-flex align-items-center">
+                            <div id="cwvOverallIcon" class="me-3 fs-3"></div>
+                            <div>
+                                <h6 class="mb-0 fw-bold" id="cwvOverallTitle">Estado de la Experiencia</h6>
+                                <p class="text-muted small mb-0" id="cwvOverallDesc">Evaluando datos de
+                                    rendimiento...</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Screaming Frog (Auditoría Técnica) Section -->
+                    <section class="mb-4 dashboard-section" id="screamingFrogSection" style="display: none;">
+                        <div class="d-flex align-items-center mb-4">
+                            <div class="bg-primary bg-opacity-10 p-3 rounded-circle me-3">
+                                <i class="bi bi-bug text-primary fs-4"></i>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center w-100">
+                                <div>
+                                    <h4 class="mb-0 fw-bold text-dark">Screaming Frog Audit</h4>
+                                    <small class="text-muted">Carga un CSV exportado para ver el análisis técnico
+                                        detallado</small>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <input type="file" id="sfCsvInput" accept=".csv" style="display: none;">
+                                    <button class="btn btn-primary btn-sm rounded-pill px-4 shadow-sm"
+                                        onclick="document.getElementById('sfCsvInput').click()">
+                                        <i class="bi bi-upload me-2"></i> Cargar CSV
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-4">
+                            <!-- Global Health Score -->
+                            <div class="col-lg-4">
+                                <div class="card border-0 shadow-sm h-100 bg-white overflow-hidden">
+                                    <div class="card-body text-center p-4">
+                                        <h6 class="text-muted fw-bold small text-uppercase mb-4">Puntuación de Salud
+                                        </h6>
+                                        <div class="position-relative d-inline-block mb-3">
+                                            <canvas id="healthScoreChart" width="160" height="160"></canvas>
+                                            <div class="position-absolute top-50 start-50 translate-middle">
+                                                <h2 class="mb-0 fw-bold text-dark" id="healthScoreValue">0%</h2>
+                                            </div>
+                                        </div>
+                                        <div class="mt-2">
+                                            <span
+                                                class="badge bg-secondary-subtle text-secondary px-3 py-2 rounded-pill" id="healthScoreBadge">Pendiente</span>
+                                        </div>
+                                        <p class="text-muted small mt-3 mb-0" id="sfUrlCountText">Esperando datos de rastreo...</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Status Codes Distribution -->
+                            <div class="col-lg-8">
+                                <div class="card border-0 shadow-sm h-100 bg-white">
+                                    <div
+                                        class="card-header bg-white py-3 border-bottom d-flex justify-content-between align-items-center">
+                                        <h6 class="m-0 font-weight-bold text-dark fw-semibold">Códigos de Respuesta HTTP
+                                        </h6>
+                                        <span class="badge bg-light text-muted border px-3">Estado: Finalizado</span>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-6 text-center">
+                                                <div style="height: 180px;">
+                                                    <canvas id="statusCodesChart"></canvas>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="d-flex flex-column gap-2 mt-3 mt-md-0">
+                                                    <div
+                                                        class="d-flex justify-content-between align-items-center p-2 bg-light rounded border-start border-4 border-success">
+                                                        <span class="small fw-medium">2xx Success</span>
+                                                        <span class="fw-bold" id="status2xx">0</span>
+                                                    </div>
+                                                    <div
+                                                        class="d-flex justify-content-between align-items-center p-2 bg-light rounded border-start border-4 border-primary">
+                                                        <span class="small fw-medium">3xx Redirect</span>
+                                                        <span class="fw-bold" id="status3xx">0</span>
+                                                    </div>
+                                                    <div
+                                                        class="d-flex justify-content-between align-items-center p-2 bg-light rounded border-start border-4 border-warning">
+                                                        <span class="small fw-medium">4xx Client Error</span>
+                                                        <span class="fw-bold" id="status4xx">0</span>
+                                                    </div>
+                                                    <div
+                                                        class="d-flex justify-content-between align-items-center p-2 bg-light rounded border-start border-4 border-danger">
+                                                        <span class="small fw-medium">5xx Server Error</span>
+                                                        <span class="fw-bold" id="status5xx">0</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Critical Issues Table -->
+                            <div class="col-12">
+                                <div class="card border-0 shadow-sm bg-white overflow-hidden">
+                                    <div class="card-header bg-white py-3 border-bottom">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <h6 class="m-0 font-weight-bold text-dark fw-semibold">Auditoría de
+                                                Contenido y Etiquetas</h6>
+                                            <button class="btn btn-sm btn-outline-secondary"><i
+                                                    class="bi bi-download me-2"></i>Exportar CSV</button>
+                                        </div>
+                                    </div>
+                                    <div class="card-body p-0">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover align-middle mb-0">
+                                                <thead class="bg-light">
+                                                    <tr>
+                                                        <th class="ps-4 py-3">ELEMENTO AUDITADO</th>
+                                                        <th class="text-center py-3">AFECTADOS</th>
+                                                        <th class="py-3">GRAVEDAD</th>
+                                                        <th class="text-center py-3">ESTADO</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="sfIssuesTable">
+                                                    <tr>
+                                                        <td colspan="4" class="text-center py-4 text-muted small">
+                                                            <i class="bi bi-info-circle me-2"></i> Carga un archivo CSV para ver los problemas detectados
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Tiempos de Respuesta Module -->
+                            <div class="col-12 mt-4" id="sfResponseTimeModule" style="display: none;">
+                                <div class="card border-0 shadow-sm bg-white overflow-hidden">
+                                    <div class="card-header bg-white py-3 border-bottom">
+                                        <h6 class="m-0 font-weight-bold text-dark fw-semibold">Tiempos de Respuesta (Velocidad)</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row g-3">
+                                            <div class="col-md-3">
+                                                <div class="p-3 bg-light rounded text-center h-100 d-flex flex-column justify-content-center border">
+                                                    <small class="text-muted text-uppercase fw-bold xsmall mb-1">Promedio</small>
+                                                    <h3 class="mb-0 fw-bold text-primary" id="sfAvgRT">0.00s</h3>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="p-3 bg-light rounded text-center h-100 d-flex flex-column justify-content-center border">
+                                                    <small class="text-muted text-uppercase fw-bold xsmall mb-1">Máximo</small>
+                                                    <h3 class="mb-0 fw-bold text-danger" id="sfMaxRT">0.00s</h3>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="p-3 bg-white border rounded h-100">
+                                                    <h6 class="small fw-bold text-dark mb-3"><i class="bi bi-clock-history me-2 text-warning"></i>Páginas más lentas (>1.5s)</h6>
+                                                    <ul class="list-group list-group-flush" id="sfSlowPagesList" style="max-height: 150px; overflow-y: auto;">
+                                                        <li class="list-group-item px-0 py-1 border-0 text-muted small italic">No se detectaron páginas lentas</li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+    </div> <!-- Closing mainApp -->
+
+    <!-- Bootstrap Bundle JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="js/scripts.js"></script>
+</body>
+
+</html>

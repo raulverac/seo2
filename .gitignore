@@ -1,0 +1,13 @@
+# Dependencies
+node_modules/
+backend/node_modules/
+
+# Environment / Credentials / Secrets
+.env
+backend/.env
+credentials.json
+backend/credentials.json
+
+# OS files
+.DS_Store
+**/.DS_Store
